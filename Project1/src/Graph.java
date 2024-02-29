@@ -1,4 +1,5 @@
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +26,8 @@ public class Graph {
     adjacencyList = new HashMap<Integer, List<Integer>>();
   }
 
-  public void addVertex() {
+  public void addVertex(int value) {
+    adjacencyList.put(value, new LinkedList<Integer>());
   }
 
   public void addEdge() {
