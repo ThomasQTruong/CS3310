@@ -1,4 +1,4 @@
-# [CS 3310] Project 1 - Graph Traversal
+# [CS 3310] Programming Assignment 1 - Graph Traversal
 By: Thomas Truong\
 Bronco ID: 014426906
 
