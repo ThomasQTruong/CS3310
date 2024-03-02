@@ -9,6 +9,9 @@ all: Files
 Files: $(wildcard ../src/*.java)
 	javac -d ../bin/ $^
 
+run:
+	make clean && make && java -cp ../bin/ GraphTester ../test/SampleInput.txt
+
 # Cleans up every class file in bin.
 clean:
 	rm -rf ../bin/*.class
