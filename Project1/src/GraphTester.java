@@ -81,10 +81,12 @@ public class GraphTester {
    * @param args - command-line arguments (file name).
    */
   public static void main(String[] args) {
+    // Convert the input file into a graph.
     fileToGraphs(args[0]);
 
+    // For every graph, apply BFS algorithm.
     for (int i = 0; i < graphList.size(); ++i) {
-      System.out.println(graphList.get(i) + ": " + graphList.get(i).getNumberOfEdges());
+      graphList.get(i).BFS(i + 1);
     }
   }
 }

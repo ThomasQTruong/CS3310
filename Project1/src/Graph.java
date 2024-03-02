@@ -1,7 +1,11 @@
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
 
 /**
  * <p>
@@ -18,6 +22,7 @@ import java.util.Map;
  */
 public class Graph {
   private Map<Integer, List<Integer>> adjacencyList;
+  private int sizeOfGraph;
 
   /**
    * Default Constructor: initialize a hashmap as the adjacency list.
@@ -25,6 +30,7 @@ public class Graph {
   public Graph() {
     // Initialize list.
     adjacencyList = new HashMap<Integer, List<Integer>>();
+    sizeOfGraph = 0;
   }
 
 
@@ -41,6 +47,8 @@ public class Graph {
     for (int i = 1; i <= amount; ++i) {
       adjacencyList.put(i, new LinkedList<Integer>());
     }
+
+    sizeOfGraph = amount;
   }
 
 
@@ -58,6 +66,9 @@ public class Graph {
 
     // Vertex is unique, create.
     adjacencyList.put(value, new LinkedList<Integer>());
+
+    ++sizeOfGraph;
+
     return true;
   }
 
@@ -90,7 +101,62 @@ public class Graph {
     return true;
   }
 
-  public int getNumberOfEdges() {
-    return adjacencyList.size();
+
+  public void BFS(int graphNumber) {
+    // Holds the visited verticies.
+    Set<Integer> visited = new HashSet<>();
+    Queue<Integer> queue = new LinkedList<>();
+    String result = "";  // The result to print at the end.
+    int connectedComponents = 0;  // Amount of connected components.
+    
+    // For every vertex in the adjacency list.
+    for (int i = 1; i < adjacencyList.size(); ++i) {
+
+      // Has not visited the vertex.
+      if (!visited.contains(i)) {
+        result += "{";
+        queue.add(i);
+        visited.add(i);
+
+        // Is the first vertex (dont add space).
+        boolean start = true;
+
+        // Has a vertex to go to still.
+        while (!queue.isEmpty()) {
+          // Get vertex from queue.
+          int currentVertex = queue.poll();
+
+          // Print based on start or not (no space for start).
+          if (start) {
+            result += currentVertex;
+            start = false;
+          } else {
+            result += " " + currentVertex;
+          }
+
+          // Get the neighbors.
+          List<Integer> neighbors = adjacencyList.get(currentVertex);
+
+          // Visit the neighbors.
+          for (int neighbor : neighbors) {
+            if (!visited.contains(neighbor)) {
+              visited.add(neighbor);
+              queue.add(neighbor);
+            }
+          }
+        }
+        result += "} ";
+        ++connectedComponents;
+      }
+    }
+
+    // Print out the results.
+    System.out.println("Graph " + graphNumber + ": ");
+    System.out.println(connectedComponents + " connected components: " + result);
+  }
+
+
+  public int size() {
+    return sizeOfGraph;
   }
 }
