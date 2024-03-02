@@ -10,14 +10,14 @@ import java.util.Scanner;
  * CS 3310, Spring 2024
  * Programming Assignment 1
  * 
- * GraphTester.java
+ * Prog1.java
  * Driver class to test out graph data structures and 
  * BFS algorithm for Graph.java.
  *
  * Copyright (c) 2024, Thomas Truong.
  * </p>
  */
-public class GraphTester {
+public class Prog1 {
   private static ArrayList<Graph> graphList = new ArrayList<Graph>();
 
   /**

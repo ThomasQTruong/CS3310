@@ -30,4 +30,4 @@ Bronco ID: 014426906
 #### Windows
   1. Open command prompt.
   2. Change directory into ```.\bin\```.
-  3. Use the command: ```java GraphTester ..\Test\SampleInput.txt```.
+  3. Use the command: ```java Prog1 ..\Test\SampleInput.txt```.
