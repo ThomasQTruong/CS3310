@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -102,6 +101,11 @@ public class Graph {
   }
 
 
+  /**
+   * Uses the BFS algorithm to visit and print all of the connected components.
+   *
+   * @param graphNumber - the ID number of the graph.
+   */
   public void BFS(int graphNumber) {
     // Holds the visited verticies.
     Set<Integer> visited = new HashSet<>();
