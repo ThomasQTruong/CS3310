@@ -29,5 +29,5 @@ Bronco ID: 014426906
   2. Use the command: ```make run```.
 #### Windows
   1. Open command prompt.
-  2. Change directory into ```./bin/```.
+  2. Change directory into ```.\bin\```.
   3. Use the command: ```java GraphTester ..\Test\SampleInput.txt```.
