@@ -89,4 +89,8 @@ public class Graph {
 
     return true;
   }
+
+  public int getNumberOfEdges() {
+    return adjacencyList.size();
+  }
 }

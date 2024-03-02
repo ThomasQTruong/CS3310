@@ -71,7 +71,7 @@ public class GraphTester {
       graph.addEdge(Integer.valueOf(verticies[0]), Integer.valueOf(verticies[1]));
     }
 
-    return new Graph();
+    return graph;
   }
 
 
@@ -84,7 +84,7 @@ public class GraphTester {
     fileToGraphs(args[0]);
 
     for (int i = 0; i < graphList.size(); ++i) {
-      System.out.println(graphList.get(i));
+      System.out.println(graphList.get(i) + ": " + graphList.get(i).getNumberOfEdges());
     }
   }
 }
