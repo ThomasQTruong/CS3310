@@ -12,3 +12,7 @@ Files: $(wildcard ../src/*.java)
 # Cleans up every class file in bin.
 clean:
 	rm -rf ../bin/*.class
+
+# Runs the program with the given data file.
+run:
+	make clean && make && java -cp ../bin/ AnagramDetector words.txt
