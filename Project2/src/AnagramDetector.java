@@ -2,13 +2,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
-import java.util.TreeMap;
-import java.util.TreeSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.TreeMap;
 
 /**
  * <p>
@@ -91,7 +92,7 @@ public class AnagramDetector {
       // Key never existed yet.
       if (!anagramsSet.containsKey(sorted)) {
         // Create set for the key.
-        anagramsSet.put(sorted, new TreeSet<String>());
+        anagramsSet.put(sorted, new HashSet<String>());
       }
       
       // Does not already exist, add word into the set.
@@ -99,6 +100,14 @@ public class AnagramDetector {
         anagramsSet.get(sorted).add(word);
         filteredSet.add(filtered);
       }
+    }
+
+    // For every item in the TreeMap.
+    for (Map.Entry<String, Set<String>> entry : anagramsSet.entrySet()) {
+      // Sort every list by using Collections.sort().
+      ArrayList<String> toSort = new ArrayList<String>(entry.getValue());
+      Collections.sort(toSort);
+      entry.setValue(new LinkedHashSet<String>(toSort));
     }
 
     return anagramsSet;
