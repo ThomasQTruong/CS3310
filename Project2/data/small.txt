@@ -5,3 +5,6 @@ tea
 cat
 atc
 tac
+Tac
+tAc
+cAt

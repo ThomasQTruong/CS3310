@@ -56,6 +56,22 @@ public class AnagramDetector {
 
 
   /**
+   * Presorts a String alphabetically by character.
+   *
+   * @param word - the string to sort.
+   * @return String - the alphabetically sorted word.
+   */
+  public static String presortString(String word) {
+    // Convert into array and sort each letter alphabetically.
+    char[] letters = word.toLowerCase().toCharArray();
+    Arrays.sort(letters);
+
+    // Convert back into a String.
+    return new String(letters);
+  }
+
+
+  /**
    * Gets the sets of anagrams of a data file.
    *
    * @param words - the list of words from the data file. 
@@ -66,12 +82,9 @@ public class AnagramDetector {
     
     // For every word in the list.
     for (String word : words) {
-      // Presort each word alphabetically.
-      char[] letters = word.toLowerCase().toCharArray();
-      Arrays.sort(letters);
-
-      // Convert back into a String.
-      String sorted = new String(letters);
+      // Get rid of non-alphabetical characters and sort.
+      String filtered = word.replaceAll("[^a-zA-Z]", "");
+      String sorted = presortString(filtered);
 
       // Key never existed yet.
       if (!anagramsSet.containsKey(sorted)) {
@@ -79,8 +92,20 @@ public class AnagramDetector {
         anagramsSet.put(sorted, new TreeSet<String>());
       }
 
-      // Add word into the set.
-      anagramsSet.get(sorted).add(word);
+      // Check if exists already with variations of cases.
+      boolean exists = false;
+      for (String item : anagramsSet.get(sorted)) {
+        String filteredItem = item.replaceAll("[^a-zA-Z]", "");
+        // Dupelicate word found, go next cycle.
+        if (filteredItem.equalsIgnoreCase(filtered)) {
+          exists = true;
+        }
+      }
+      
+      // Does not already exist, add word into the set.
+      if (!exists) {
+        anagramsSet.get(sorted).add(word);
+      }
     }
 
     return anagramsSet;
@@ -93,6 +118,12 @@ public class AnagramDetector {
    * @param anagrams - the list of anagram sets.
    */
   public static void printAnagramSets(Map<String, Set<String>> anagrams) {
+    for (Map.Entry<String, Set<String>> entry : anagrams.entrySet()) {
+      if (entry.getValue().size() > 1) {
+        System.out.println(entry.getValue());
+      }
+    }
+
     return;
   }
 
@@ -106,7 +137,8 @@ public class AnagramDetector {
     List<String> words = extractData(args[0]);
     Map<String, Set<String>> anagramSet = getAnagramsSet(words);
 
-    System.out.println(anagramSet);
+    System.out.println("Anagram Sets:");
+    printAnagramSets(anagramSet);
 
     return;
   }
