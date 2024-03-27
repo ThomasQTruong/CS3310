@@ -2,8 +2,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -59,14 +59,14 @@ public class AnagramDetector {
    * Gets the sets of anagrams of a data file.
    *
    * @param words - the list of words from the data file. 
-   * @return HashMap[String, Set[String]] - the sets of every anagram.
+   * @return TreeMap[String, Set[String]] - the sets of every anagram.
    */
-  public static HashMap<String, Set<String>> getAnagramsSet(List<String> words) {
-    HashMap<String, Set<String>> anagramsSet = new HashMap<String, Set<String>>();
+  public static TreeMap<String, Set<String>> getAnagramsSet(List<String> words) {
+    TreeMap<String, Set<String>> anagramsSet = new TreeMap<String, Set<String>>();
     
     // For every word in the list.
     for (String word : words) {
-      // Make lowercase, turn into an array, and sort alphabetically.
+      // Presort each word alphabetically.
       char[] letters = word.toLowerCase().toCharArray();
       Arrays.sort(letters);
 
@@ -76,7 +76,7 @@ public class AnagramDetector {
       // Key never existed yet.
       if (!anagramsSet.containsKey(sorted)) {
         // Create set for the key.
-        anagramsSet.put(sorted, new HashSet<String>());
+        anagramsSet.put(sorted, new TreeSet<String>());
       }
 
       // Add word into the set.
@@ -84,6 +84,16 @@ public class AnagramDetector {
     }
 
     return anagramsSet;
+  }
+
+
+  /**
+   * Prints out every anagram set.
+   *
+   * @param anagrams - the list of anagram sets.
+   */
+  public static void printAnagramSets(Map<String, Set<String>> anagrams) {
+    return;
   }
 
 
