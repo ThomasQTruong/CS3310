@@ -16,3 +16,7 @@ clean:
 # Runs the program with the given data file.
 run:
 	make clean && make && java -cp ../bin/ AnagramDetector ../data/words.txt
+
+# Runs the program with the small data file.
+small:
+	make clean && make && java -cp ../bin/ AnagramDetector ../data/small.txt

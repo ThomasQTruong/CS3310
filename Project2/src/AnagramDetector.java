@@ -1,7 +1,11 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -22,16 +26,16 @@ public class AnagramDetector {
   /**
    * Extracts data from a file into an ArrayList.
    *
-   * @param fileName - the name of the data file.
+   * @param filePath - the path of the data file.
    * @return ArrayList[String] - the list of words from the data file.
    */
-  public static ArrayList<String> extractData(String fileName) {
+  public static ArrayList<String> extractData(String filePath) {
     // List that contains the words from the data file.
     ArrayList<String> words = new ArrayList<String>();
 
     // Try to read file.
     try {
-      File data = new File(fileName);
+      File data = new File(filePath);
       Scanner fileReader = new Scanner(data);
 
       // Add every word into the list.
@@ -43,25 +47,56 @@ public class AnagramDetector {
       fileReader.close();
     } catch (FileNotFoundException e) {
       // Something went wrong.
-      System.out.println("Unable to extract from data file: " + fileName + ".");
+      System.out.println("Unable to extract from data file: " + filePath + ".");
       System.exit(1);
     }
 
     return words;
   }
 
+
   /**
    * Gets the sets of anagrams of a data file.
    *
    * @param words - the list of words from the data file. 
-   * @return - HashSet[ArrayList[String]] the set of every anagram.
+   * @return HashMap[String, Set[String]] - the sets of every anagram.
    */
-  public static HashSet<ArrayList<String>> getAnagramsSet(ArrayList<String> words) {
-    return new HashSet<ArrayList<String>>();
+  public static HashMap<String, Set<String>> getAnagramsSet(List<String> words) {
+    HashMap<String, Set<String>> anagramsSet = new HashMap<String, Set<String>>();
+    
+    // For every word in the list.
+    for (String word : words) {
+      // Make lowercase, turn into an array, and sort alphabetically.
+      char[] letters = word.toLowerCase().toCharArray();
+      Arrays.sort(letters);
+
+      // Convert back into a String.
+      String sorted = new String(letters);
+
+      // Key never existed yet.
+      if (!anagramsSet.containsKey(sorted)) {
+        // Create set for the key.
+        anagramsSet.put(sorted, new HashSet<String>());
+      }
+
+      // Add word into the set.
+      anagramsSet.get(sorted).add(word);
+    }
+
+    return anagramsSet;
   }
 
+
+  /**
+   * The start of the program.
+   *
+   * @param args - the command-line arguments (expected data file path).
+   */
   public static void main(String[] args) {
-    System.out.println(extractData(args[0]));
+    List<String> words = extractData(args[0]);
+    Map<String, Set<String>> anagramSet = getAnagramsSet(words);
+
+    System.out.println(anagramSet);
 
     return;
   }
