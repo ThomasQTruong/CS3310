@@ -15,4 +15,4 @@ clean:
 
 # Runs the program with the given data file.
 run:
-	make clean && make && java -cp ../bin/ AnagramDetector words.txt
+	make clean && make && java -cp ../bin/ AnagramDetector ../data/words.txt
