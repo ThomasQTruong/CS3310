@@ -136,11 +136,14 @@ public class AnagramDetector {
    * @param args - the command-line arguments (expected data file path).
    */
   public static void main(String[] args) {
+    // Obtain sets.
     List<String> words = extractData(args[0]);
     Map<String, Set<String>> anagramSet = getAnagramsSet(words);
 
+    // Print sets.
     System.out.println("Anagram Sets:");
     printAnagramSets(anagramSet);
+    System.out.println("There are " + anagramSet.size() + " anagram sets.");
 
     return;
   }
