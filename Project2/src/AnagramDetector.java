@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.List;
@@ -63,7 +64,7 @@ public class AnagramDetector {
    */
   public static String presortString(String word) {
     // Convert into array and sort each letter alphabetically.
-    char[] letters = word.toLowerCase().toCharArray();
+    char[] letters = word.toCharArray();
     Arrays.sort(letters);
 
     // Convert back into a String.
@@ -79,11 +80,12 @@ public class AnagramDetector {
    */
   public static TreeMap<String, Set<String>> getAnagramsSet(List<String> words) {
     TreeMap<String, Set<String>> anagramsSet = new TreeMap<String, Set<String>>();
+    Set<String> filteredSet = new HashSet<String>();
     
     // For every word in the list.
     for (String word : words) {
-      // Get rid of non-alphabetical characters and sort.
-      String filtered = word.replaceAll("[^a-zA-Z]", "");
+      // Make lowercased, get rid of non-alphabetical characters, and sort.
+      String filtered = word.toLowerCase().replaceAll("[^a-z]", "");
       String sorted = presortString(filtered);
 
       // Key never existed yet.
@@ -91,20 +93,11 @@ public class AnagramDetector {
         // Create set for the key.
         anagramsSet.put(sorted, new TreeSet<String>());
       }
-
-      // Check if exists already with variations of cases.
-      boolean exists = false;
-      for (String item : anagramsSet.get(sorted)) {
-        String filteredItem = item.replaceAll("[^a-zA-Z]", "");
-        // Dupelicate word found, go next cycle.
-        if (filteredItem.equalsIgnoreCase(filtered)) {
-          exists = true;
-        }
-      }
       
       // Does not already exist, add word into the set.
-      if (!exists) {
+      if (!filteredSet.contains(filtered)) {
         anagramsSet.get(sorted).add(word);
+        filteredSet.add(filtered);
       }
     }
 
