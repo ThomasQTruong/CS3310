@@ -1,5 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.lang.Math;
+import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -16,6 +18,8 @@ import java.util.Scanner;
  * </p>
  */
 public class CanoeRentalPathing {
+  public static int MAX_VALUE = 99;
+
   /**
    * Extracts the data from the file.
    *
@@ -45,9 +49,21 @@ public class CanoeRentalPathing {
           // Has int, store into array.
           if (fileReader.hasNextInt()) {
             rentingCosts[row][col] = fileReader.nextInt();
+
+            // Update MAX_VALUE if it isn't the actual max.
+            if (rentingCosts[row][col] > MAX_VALUE) {
+              MAX_VALUE = rentingCosts[row][col];
+            }
           } else {  // Doesn't have int, eat up input.
             fileReader.next();
           }
+        }
+      }
+
+      // Fill the under triangle with a high value (acts as infinity).
+      for (int row = 1; row < n; ++row) {
+        for (int col = 0; col < row; ++col) {
+          rentingCosts[row][col] = MAX_VALUE;
         }
       }
 
@@ -65,6 +81,44 @@ public class CanoeRentalPathing {
     return null;
   }
 
+
+  public static int getCheapestCost(int[][] rentingCosts) {
+    int n = rentingCosts.length;
+    int[][] cheapestCost = new int[n][n];
+
+    // Copy over array.
+    for (int row = 0; row < n; ++row) {
+      for (int col = 0; col < n; ++col) {
+        cheapestCost[row][col] = rentingCosts[row][col];
+      }
+    }
+
+    // Floyd Algorithm.
+    for (int k = 0; k < n; ++k) {
+      for (int row = 0; row < n; ++row) {
+        for (int col = 0; col < n; ++col) {
+          cheapestCost[row][col] = Math.min(cheapestCost[row][col],
+            cheapestCost[row][k] + cheapestCost[k][col]);
+        }
+      }
+    }
+
+    System.out.println("=========================");
+    print2DArray(cheapestCost);
+
+    return 0;
+  }
+
+
+  public static void print2DArray(int[][] array) {
+    for (int[] i : array) {
+      for (int j : i) {
+        System.out.print(j + " ");
+      }
+      System.out.println();
+    }
+  }
+
   
   /**
    * The start of the program.
@@ -74,12 +128,8 @@ public class CanoeRentalPathing {
   public static void main(String[] args) {
     int[][] rentingCosts = extractFromFile(args[0]);
 
-    // Testing extractFromFile().
-    for (int[] i : rentingCosts) {
-      for (int j : i) {
-        System.out.print(j + " ");
-      }
-      System.out.println();
-    }
+    print2DArray(rentingCosts);
+
+    getCheapestCost(rentingCosts);
   }
 }
