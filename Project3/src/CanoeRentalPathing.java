@@ -1,7 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.lang.Math;
-import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -82,38 +81,46 @@ public class CanoeRentalPathing {
   }
 
 
-  public static int getCheapestCost(int[][] rentingCosts) {
+  /**
+   * Gets the cheapest costs for each path matrix of the given matrix.
+   *
+   * @param rentingCosts - the given costs matrix.
+   * @return int[][] - the cheapest costs for each path matrix.
+   */
+  public static int[][] getCheapestCosts(int[][] rentingCosts) {
     int n = rentingCosts.length;
-    int[][] cheapestCost = new int[n][n];
+    int[][] cheapestCosts = new int[n][n];
 
     // Copy over array.
     for (int row = 0; row < n; ++row) {
       for (int col = 0; col < n; ++col) {
-        cheapestCost[row][col] = rentingCosts[row][col];
+        cheapestCosts[row][col] = rentingCosts[row][col];
       }
     }
 
-    // Floyd Algorithm.
+    // Floyd algorithm.
     for (int k = 0; k < n; ++k) {
       for (int row = 0; row < n; ++row) {
         for (int col = 0; col < n; ++col) {
-          cheapestCost[row][col] = Math.min(cheapestCost[row][col],
-            cheapestCost[row][k] + cheapestCost[k][col]);
+          cheapestCosts[row][col] = Math.min(cheapestCosts[row][col],
+                      cheapestCosts[row][k] + cheapestCosts[k][col]);
         }
       }
     }
 
-    System.out.println("=========================");
-    print2DArray(cheapestCost);
-
-    return 0;
+    return cheapestCosts;
   }
 
 
-  public static void print2DArray(int[][] array) {
-    for (int[] i : array) {
-      for (int j : i) {
-        System.out.print(j + " ");
+  /**
+   * Prints out a 2D array.
+   *
+   * @param array - the 2D array to print.
+   */
+  public static void print2dArray(int[][] array) {
+    for (int[] row : array) {
+      for (int col : row) {
+        System.out.print(col + " ");
       }
       System.out.println();
     }
@@ -127,9 +134,11 @@ public class CanoeRentalPathing {
    */
   public static void main(String[] args) {
     int[][] rentingCosts = extractFromFile(args[0]);
+    print2dArray(rentingCosts);
 
-    print2DArray(rentingCosts);
+    System.out.println("=============================");
 
-    getCheapestCost(rentingCosts);
+    int[][] cheapestCosts = getCheapestCosts(rentingCosts);
+    print2dArray(cheapestCosts);
   }
 }
