@@ -194,6 +194,8 @@ public class CanoeRentalPathing {
     int[][] predecessors = new int[n][n];
     int[][] cheapestCosts = getCheapestCosts(rentingCosts, predecessors);
     print2dArray(cheapestCosts);
+    System.out.println("-------------------------");
+    System.out.println("Port 0 to port " + (n - 1) + ": $" + cheapestCosts[0][n - 1] + ".");
     System.out.println();
     System.out.println("===== Cheapest Path =====");
     printShortestPath(predecessors, 0, n - 1);
