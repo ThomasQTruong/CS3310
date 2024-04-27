@@ -1,6 +1,9 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.lang.Math;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -25,7 +28,7 @@ public class CanoeRentalPathing {
    * @param path - the path to the data file.
    * @return int[][] - the extracted data.
    */
-  public static int[][] extractFromFile(String path) {
+  public static int[][] extractFromFile(final String path) {
     // Try to read file.
     try {
       File data = new File(path);
@@ -82,19 +85,28 @@ public class CanoeRentalPathing {
 
 
   /**
-   * Gets the cheapest costs for each path matrix of the given matrix.
+   * Gets the cheapest costs matrix and predecessors for each path of the given matrix.
    *
    * @param rentingCosts - the given costs matrix.
+   * @param predecessors - the matrix that will store the preceeding ports (gets modified).
    * @return int[][] - the cheapest costs for each path matrix.
    */
-  public static int[][] getCheapestCosts(int[][] rentingCosts) {
+  public static int[][] getCheapestCosts(final int[][] rentingCosts, int[][] predecessors) {
     int n = rentingCosts.length;
     int[][] cheapestCosts = new int[n][n];
 
-    // Copy over array.
+    // Initialize cheapCosts and predecessors arrays.
     for (int row = 0; row < n; ++row) {
       for (int col = 0; col < n; ++col) {
+        // Copy over rentingCosts into cheapCosts.
         cheapestCosts[row][col] = rentingCosts[row][col];
+
+        // If it is the upper half of the triangle.
+        if (row < col) {
+          predecessors[row][col] = row;
+        } else {  // Bottom half/main diagonal.
+          predecessors[row][col] = -1;
+        }
       }
     }
 
@@ -102,8 +114,14 @@ public class CanoeRentalPathing {
     for (int k = 0; k < n; ++k) {
       for (int row = 0; row < n; ++row) {
         for (int col = 0; col < n; ++col) {
-          cheapestCosts[row][col] = Math.min(cheapestCosts[row][col],
-                      cheapestCosts[row][k] + cheapestCosts[k][col]);
+          int minNumber = Math.min(cheapestCosts[row][col], 
+                                cheapestCosts[row][k] + cheapestCosts[k][col]);
+
+          // Different minimum, replace it and put into predecessor.
+          if (cheapestCosts[row][col] != minNumber) {
+            cheapestCosts[row][col] = minNumber;
+            predecessors[row][col] = predecessors[k][col];
+          }
         }
       }
     }
@@ -117,13 +135,44 @@ public class CanoeRentalPathing {
    *
    * @param array - the 2D array to print.
    */
-  public static void print2dArray(int[][] array) {
+  public static void print2dArray(final int[][] array) {
     for (int[] row : array) {
       for (int col : row) {
         System.out.print(col + " ");
       }
       System.out.println();
     }
+  }
+
+
+  /**
+   * Prints the shortest path from the starting port to the ending port.
+   *
+   * @param predecessors - the matrix of preceeding ports.
+   * @param start - the starting port.
+   * @param end - the ending port.
+   */
+  public static void printShortestPath(final int[][] predecessors, final int start, final int end) {
+    List<Integer> path = new ArrayList<Integer>();
+    int current = end;
+
+    // Obtain the paths.
+    while (current != start) {
+      path.add(current);
+      current = predecessors[start][current];
+    }
+    path.add(start);
+    Collections.reverse(path);
+
+    // Print the paths.
+    System.out.print("Shortest path from port " + start + " to port " + end + ": ");
+    for (int i = 0; i < path.size(); i++) {
+      System.out.print(path.get(i));
+      if (i < path.size() - 1) {
+        System.out.print(" -> ");
+      }
+    }
+    System.out.println();
   }
 
   
@@ -133,12 +182,20 @@ public class CanoeRentalPathing {
    * @param args - the command-line arguments (expected data file path).
    */
   public static void main(String[] args) {
+    // Obtain data from the file and print.
+    System.out.println("===== Renting Costs =====");
     int[][] rentingCosts = extractFromFile(args[0]);
     print2dArray(rentingCosts);
+    System.out.println();
 
-    System.out.println("=============================");
-
-    int[][] cheapestCosts = getCheapestCosts(rentingCosts);
+    // Obtain cheapest costs matrix and predecessors and print.
+    System.out.println("===== Cheapest Costs =====");
+    int n = rentingCosts.length;
+    int[][] predecessors = new int[n][n];
+    int[][] cheapestCosts = getCheapestCosts(rentingCosts, predecessors);
     print2dArray(cheapestCosts);
+    System.out.println();
+    System.out.println("===== Cheapest Path =====");
+    printShortestPath(predecessors, 0, n - 1);
   }
 }
